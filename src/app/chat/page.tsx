@@ -1,8 +1,29 @@
 "use client";
 
 import { DeepChat } from "deep-chat-react";
+import { useEffect, useState } from "react";
+import { Loader } from "lucide-react";
 
 export default function Chat() {
+  const [sessionCreated, setSessionCreated] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Create a new chat session when the component mounts
+    fetch("/api/chat/create", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then(() => setSessionCreated(true))
+      .catch(console.error);
+
+    return () => {
+      console.log("Deleting chat session");
+      fetch("/api/chat/delete", {
+        method: "DELETE",
+      }).catch(console.error);
+    };
+  }, []);
+
   const connect = {
     url: "/api/chat",
     headers: {
@@ -35,15 +56,19 @@ export default function Chat() {
 
   return (
     <div className="flex items-center justify-center h-[calc(100vh-80px)] ">
-      <div className="flex h-full w-full lg:w-1/2 lg:h-[calc(100vh-196px)]">
-        <DeepChat
-          connect={connect}
-          introMessage={intro}
-          style={chatStyles}
-          // @ts-ignore
-          messageStyles={messageStyles}
-        />
-      </div>
+      {sessionCreated ? (
+        <div className="flex h-full w-full lg:w-1/2 lg:h-[calc(100vh-196px)]">
+          <DeepChat
+            connect={connect}
+            introMessage={intro}
+            style={chatStyles}
+            // @ts-ignore
+            messageStyles={messageStyles}
+          />
+        </div>
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 }

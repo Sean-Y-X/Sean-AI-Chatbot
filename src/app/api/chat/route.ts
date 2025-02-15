@@ -1,15 +1,24 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import { SYSTEM_INSTRUCTION } from './system-instruction';
+import { ChatStore } from './chat-store';
 
-const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-const model = gemini.getGenerativeModel({ model: 'gemini-2.0-flash', systemInstruction: SYSTEM_INSTRUCTION });
+type Message = {
+  text: string;
+  role: string;
+};
+
+type RequestBody = {
+  messages: Message[];
+};
 
 export async function POST(request: Request) {
   try {
-    const { messages } = await request.json();
+    const { messages }: RequestBody = await request.json();
 
-    const chat = model.startChat();
-    const result = await chat.sendMessage(messages[0].text);
+    const chat = ChatStore.get();
+    if (!chat) {
+      return Response.json({ error: 'Chat session not found' }, { status: 404 });
+    }
+
+    const result = await chat.sendMessage(messages.map(({ text }) => text).join("\n"));
     const response = await result.response;
 
     return Response.json({ text: response.text() });
