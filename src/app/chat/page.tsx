@@ -74,7 +74,7 @@ export default function Chat() {
   return (
     <div className="flex items-center justify-center h-[calc(100vh-80px)] ">
       {sessionCreated ? (
-        <div className="flex h-full w-full lg:w-1/2 lg:h-[calc(100vh-196px)]">
+        <div className="flex h-[calc(100vh-196px)] w-full m-8 lg:w-2/3">
           <DeepChat
             connect={connect}
             introMessage={intro}
