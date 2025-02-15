@@ -1,7 +1,6 @@
 "use client";
 
 import { DeepChat } from "deep-chat-react";
-import { use } from "react";
 
 export default function Chat() {
   const connect = {
@@ -35,14 +34,16 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex items-center justify-center h-[calc(100vh-80px)]">
-      <DeepChat
-        connect={connect}
-        introMessage={intro}
-        style={chatStyles}
-        // @ts-ignore
-        messageStyles={messageStyles}
-      />
+    <div className="flex items-center justify-center h-[calc(100vh-80px)] ">
+      <div className="flex h-full w-full lg:w-1/2 lg:h-[calc(100vh-196px)]">
+        <DeepChat
+          connect={connect}
+          introMessage={intro}
+          style={chatStyles}
+          // @ts-ignore
+          messageStyles={messageStyles}
+        />
+      </div>
     </div>
   );
 }
