@@ -1,8 +1,14 @@
 "use client";
 
-import { DeepChat } from "deep-chat-react";
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
+import dynamic from "next/dynamic";
+
+// Dynamically import DeepChat with ssr disabled
+const DeepChat = dynamic(
+  () => import("deep-chat-react").then((mod) => mod.DeepChat),
+  { ssr: false },
+);
 
 export default function Chat() {
   const [sessionCreated, setSessionCreated] = useState<boolean>(false);
