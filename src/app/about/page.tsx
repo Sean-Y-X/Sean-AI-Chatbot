@@ -2,13 +2,12 @@ import { Github } from "lucide-react";
 
 export default function About() {
   const TECH_STACK = [
+    { name: "Bun", url: "https://bun.sh" },
+    { name: "DeepChat", url: "https://deepchat.dev" },
+    { name: "Gemini", url: "https://deepmind.google/technologies/gemini/" },
     { name: "Next.js", url: "https://nextjs.org" },
     { name: "Shadcn/ui", url: "https://ui.shadcn.com" },
-    { name: "DeepChat", url: "https://deepchat.dev" },
-    {
-      name: "Gemini",
-      url: "https://deepmind.google/technologies/gemini/",
-    },
+    { name: "Vercel", url: "https://vercel.com" },
   ];
   return (
     <div className="max-w-3xl mx-auto py-12 px-6">
@@ -19,7 +18,7 @@ export default function About() {
       <div className="space-y-8 mt-12">
         <section>
           <h2 className="text-2xl font-semibold mb-4">Tech Stack</h2>
-          <ul className="grid grid-cols-2 gap-4">
+          <ul className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {TECH_STACK.map((tech) => (
               <li
                 key={tech.name}
