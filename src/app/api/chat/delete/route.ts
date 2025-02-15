@@ -6,6 +6,6 @@ export async function DELETE() {
     return Response.json({ success: true });
   } catch (error) {
     console.error('Error:', error);
-    return Response.json({ error: 'Something went wrong' }, { status: 500 });
+    return Response.error();
   }
 }

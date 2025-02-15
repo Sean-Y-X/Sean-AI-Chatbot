@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 // Dynamically import DeepChat with ssr disabled
 const DeepChat = dynamic(
@@ -60,6 +61,16 @@ export default function Chat() {
     },
   };
 
+  const onError = () => {
+    toast("Something went wrong", {
+      description: "Please refresh the page and try again.",
+      action: {
+        label: "Refresh",
+        onClick: () => window.location.reload(),
+      },
+    });
+  };
+
   return (
     <div className="flex items-center justify-center h-[calc(100vh-80px)] ">
       {sessionCreated ? (
@@ -70,6 +81,7 @@ export default function Chat() {
             style={chatStyles}
             // @ts-ignore
             messageStyles={messageStyles}
+            onError={onError}
           />
         </div>
       ) : (
