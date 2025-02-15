@@ -16,7 +16,7 @@ export default function Chat() {
 
   const chatStyles = {
     borderRadius: "10px",
-    border: "solid 2px #545454",
+    border: "solid 1px #545454",
     backgroundColor: "#000",
     padding: "12px 6px",
     height: "100%",
