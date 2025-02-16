@@ -69,7 +69,7 @@ export default function Chat() {
     borderRadius: "10px",
     border: "solid 1px #545454",
     backgroundColor: "#000",
-    padding: "12px 6px",
+    paddingBottom: "10px",
     height: "100%",
     width: "100%",
   };
@@ -82,6 +82,27 @@ export default function Chat() {
     loading: {
       bubble: { backgroundColor: "#545454", color: "white" },
     },
+  };
+
+  const textInputStyles = {
+    container: {
+      borderRadius: "8px",
+      border: "solid 1px #545454",
+      backgroundColor: "#000",
+      padding: "10px 6px",
+      color: "white",
+    },
+  };
+
+  const submitButtonStyles = {
+    submit: {
+      container: {
+        default: {
+          padding: "10px 6px",
+        },
+      },
+    },
+    position: "inside-right" as const,
   };
 
   const onError = () => {
@@ -97,13 +118,15 @@ export default function Chat() {
   return (
     <div className="flex items-center justify-center h-[calc(100vh-80px)]">
       {sessionId ? (
-        <div className="flex w-full mx-8 h-[400px] lg:h-[calc(100vh-196px)] lg:w-2/3">
+        <div className="flex w-full mx-4 h-[400px] lg:h-[calc(100vh-196px)] lg:w-2/3">
           <DeepChat
             connect={connect}
             introMessage={intro}
             style={chatStyles}
             // @ts-ignore
             messageStyles={messageStyles}
+            textInput={{ styles: textInputStyles }}
+            submitButtonStyles={submitButtonStyles}
             onError={onError}
           />
         </div>
