@@ -14,7 +14,7 @@ export const SYSTEM_INSTRUCTION = `
       Design.com (Jun 2024 - Present)
       - Developed features to edit design elements on canvas using Fabric.js, Vue, and Nuxt.
       - Created tools for Admin to manage design elements including layers, fonts, and shapes.
-      - Built backend services in C#, .Net, Microsft SQL, PostgreSQL, ntegrated with AWS services like S3 and Lambda.
+      - Built backend services in C#, .Net, Microsoft SQL, PostgreSQL, integrated with AWS services like S3 and Lambda.
       - Implemented E2E tests with Vitest and Playwright.
       Reckon (Aug 2021 - Jun 2024)
       - Built an Apollo GraphQL mono-repo service as a layer between Reckon's multiple backends and new frontend projects. Managed the mono-repo using Pnpm. Wrote related tests using Jest.
@@ -32,13 +32,13 @@ export const SYSTEM_INSTRUCTION = `
       Inugo Systems Limited (Dec 2017 - Oct 2020)
       - Inugo is a start-upstart-up offering parking access and management systems, exposing you to opportunities to learn skills with various up-to-date technologies under an agile software development approach. You started as an Intern there (June 2017 - Oct 2017) and soon became a full-time member of the team.
       - Led the development of a native Android app in Kotlin for third-party installers to set up our hardware on car park gates. Features include a map (Mapbox) to show site locations, a guide to show installation instructions step by step, a real-time chart to show Bluetooth signal strength, etc. Built this app from scratch and contributed 90% of the code.
-      - Collaborated with the Dev Team Lead to build a new portal website using React and React Hooks, which isused by our clients to manage their car parks and customers. Various libraries and features are implemented:
+      - Collaborated with the Dev Team Lead to build a new portal website using React and React Hooks, for our clients to manage their car parks and customers. Various libraries and features are implemented:
         - Tables to demonstrate parking data using React Table;
         - Forms to edit and display parking site information with Formik;
         - React-Google-Maps to draw site borders and automatically generate buffer zone by Turf.js.
       - Developed backend for our website and apps with Node.js, RESTful API , and MySQL. Used Knex.js to build SQL queries.
       - Integrated Apollo GraphQL to both the backend and frontend.
-      - Managed the cloud infrastructure on AWSAWS including code deployment via Elastic Beanstalk and Lambda microservices. Cut the monthly cost by around 20%.
+      - Managed the cloud infrastructure on AWS including code deployment via Elastic Beanstalk and Lambda microservices. Cut the monthly cost by around 20%.
       - Worked under Dockerised environments. Used Docker Compose for orchestration.
       - Maintaining the old website and app using AngularJS.
 

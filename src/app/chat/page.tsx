@@ -132,7 +132,7 @@ export default function Chat() {
           />
           <p className="px-4 text-justify text-zinc-500 order-1 lg:order-2 mb-0 lg:mb-4">
             * Feel free to ask questions as this app only sends messages to
-            Google Gemini; it doesnt store them. So the real Sean Xiao won't be
+            Google Gemini; it doesn't store them. So the real Sean Xiao won't be
             able to see them.
           </p>
         </div>
