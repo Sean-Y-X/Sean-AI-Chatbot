@@ -11,13 +11,13 @@ export default function Home() {
           in Sydney.
         </p>
         <p className="max-w-[600px] text-center sm:text-left">
-          Wanna know more about me?
+          Curious about my work experience and skills?
         </p>
         <Link href="/chat">
-          <Button>Let's chat!</Button>
+          <Button aria-label="Start Chat">Let's chat!</Button>
         </Link>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center text-sm text-zinc-500">
         © 2025 Sean Xiao
       </footer>
     </div>
