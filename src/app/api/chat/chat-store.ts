@@ -1,23 +1,23 @@
 import type { ChatSession } from '@google/generative-ai';
 
 declare global {
-  var chatSession: ChatSession | null;
+  var chatSessions: Map<string, ChatSession>;
 }
 
-if (!global.chatSession) {
-  global.chatSession = null;
+if (!global.chatSessions) {
+  global.chatSessions = new Map();
 }
 
 export const ChatStore = {
-  create: (session: ChatSession): void => {
-    global.chatSession = session;
+  create: (sessionId: string, session: ChatSession): void => {
+    global.chatSessions.set(sessionId, session);
   },
 
-  get: (): ChatSession | null => {
-    return global.chatSession;
+  get: (sessionId: string): ChatSession | null => {
+    return global.chatSessions.get(sessionId) || null;
   },
 
-  delete: (): void => {
-    global.chatSession = null;
+  delete: (sessionId: string): void => {
+    global.chatSessions.delete(sessionId);
   }
 };

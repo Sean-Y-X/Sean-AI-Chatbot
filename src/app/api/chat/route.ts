@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { ChatStore } from './chat-store';
 
 type Message = {
@@ -7,13 +8,14 @@ type Message = {
 
 type RequestBody = {
   messages: Message[];
+  sessionId: string;
 };
 
 export async function POST(request: Request) {
   try {
-    const { messages }: RequestBody = await request.json();
+    const { sessionId, messages }: RequestBody = await request.json();
 
-    const chat = ChatStore.get();
+    const chat = ChatStore.get(sessionId);
 
     if (!chat) {
       return Response.error();
@@ -22,9 +24,9 @@ export async function POST(request: Request) {
     const result = await chat.sendMessage(messages.map(({ text }) => text).join("\n"));
     const response = await result.response;
 
-    return Response.json({ text: response.text() });
+    return NextResponse.json({ text: response.text() });
   } catch (error) {
     console.error('Error:', error);
-    return Response.error();
+    return NextResponse.error();
   }
 }

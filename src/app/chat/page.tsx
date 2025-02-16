@@ -2,7 +2,7 @@
 
 import { Loader } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 // Dynamically import DeepChat with ssr disabled
@@ -12,31 +12,54 @@ const DeepChat = dynamic(
 );
 
 export default function Chat() {
-  const [sessionCreated, setSessionCreated] = useState<boolean>(false);
+  const [sessionId, setSessionId] = useState<string>("");
+  const sessionIdRef = useRef<string>(sessionId);
+
+  useEffect(() => {
+    sessionIdRef.current = sessionId;
+  }, [sessionId]);
 
   useEffect(() => {
     // Create a new chat session when the component mounts
-    fetch("/api/chat/create", {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then(() => setSessionCreated(true))
-      .catch(console.error);
+    const createSession = async () => {
+      try {
+        const response = await fetch("/api/chat/create", {
+          method: "POST",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to create session");
+        }
+
+        const { sessionId } = await response.json();
+        setSessionId(sessionId);
+      } catch (error) {
+        console.error("Error creating session:", error);
+      }
+    };
+
+    createSession();
 
     return () => {
-      console.log("Deleting chat session");
-      fetch("/api/chat/delete", {
+      // Delete the chat session when the component unmounts
+      fetch(`/api/chat/delete/${sessionIdRef.current}`, {
         method: "DELETE",
       }).catch(console.error);
     };
   }, []);
 
-  const connect = {
-    url: "/api/chat",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+  const connect = useMemo(
+    () => ({
+      url: "/api/chat",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      additionalBodyProps: {
+        sessionId,
+      },
+    }),
+    [sessionId],
+  );
 
   const intro = {
     text: "G'day mate! How may I help you today?",
@@ -73,7 +96,7 @@ export default function Chat() {
 
   return (
     <div className="flex items-center justify-center h-[calc(100vh-80px)]">
-      {sessionCreated ? (
+      {sessionId ? (
         <div className="flex w-full mx-8 h-[400px] lg:h-[calc(100vh-196px)] lg:w-2/3">
           <DeepChat
             connect={connect}

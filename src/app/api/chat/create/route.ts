@@ -1,4 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { nanoid } from 'nanoid';
+import { NextResponse } from 'next/server';
 import { ChatStore } from '../chat-store';
 import { SYSTEM_INSTRUCTION } from '../system-instruction';
 
@@ -8,11 +10,12 @@ const model = gemini.getGenerativeModel({ model: 'gemini-2.0-flash', systemInstr
 export async function POST() {
   try {
     const chat = model.startChat();
-    ChatStore.create(chat);
+    const id = nanoid();
+    ChatStore.create(id, chat);
 
-    return Response.json({ success: true });
+    return NextResponse.json({ sessionId: id });
   } catch (error) {
     console.error('Error:', error);
-    return Response.error();
+    return NextResponse.error();
   }
 }
