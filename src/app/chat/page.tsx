@@ -39,7 +39,7 @@ export default function Chat() {
   };
 
   const intro = {
-    text: "Hello! I'm Sean. How may I help you?",
+    text: "G'day mate! How may I help you today?",
   };
 
   const chatStyles = {
