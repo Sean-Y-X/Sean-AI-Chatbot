@@ -42,7 +42,7 @@ export default function Chat() {
 
     return () => {
       // Delete the chat session when the component unmounts
-      fetch(`/api/chat/delete/${sessionIdRef.current}`, {
+      fetch(`/api/chat/${sessionIdRef.current}`, {
         method: "DELETE",
       }).catch(console.error);
     };

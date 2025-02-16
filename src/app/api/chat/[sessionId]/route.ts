@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
-import { ChatStore } from '../../chat-store';
+import { ChatStore } from '../chat-store';
+import type { NextRequest } from 'next/server';
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { sessionId: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
   try {
-    const { sessionId } = params;
+    const { sessionId } = await params;
 
     if (!sessionId) {
       return NextResponse.json(
