@@ -132,7 +132,7 @@ export default function Chat() {
           />
           <p className="px-4 text-justify text-zinc-500 order-1 lg:order-2 mb-0 lg:mb-4">
             * This app only communicates with Google Gemini and does not store
-            any messages. The real Sean Xiao won't have access to them."
+            any messages. The real Sean Xiao won't have access to them.
           </p>
         </div>
       ) : (
