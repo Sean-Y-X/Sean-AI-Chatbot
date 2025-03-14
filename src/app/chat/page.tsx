@@ -80,7 +80,11 @@ export default function Chat() {
       user: { bubble: { backgroundColor: "#7F00FF", color: "white" } },
     },
     loading: {
-      bubble: { backgroundColor: "#545454", color: "white" },
+      message: {
+        styles: {
+          bubble: { backgroundColor: "#545454", color: "white" },
+        },
+      },
     },
   };
 
@@ -124,7 +128,6 @@ export default function Chat() {
             connect={connect}
             introMessage={intro}
             style={chatStyles}
-            // @ts-ignore
             messageStyles={messageStyles}
             textInput={{ styles: textInputStyles }}
             submitButtonStyles={submitButtonStyles}
