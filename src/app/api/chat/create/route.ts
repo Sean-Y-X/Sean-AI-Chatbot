@@ -1,7 +1,7 @@
+import { chatSessionManager } from "@/lib/ChatSessionManager ";
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { nanoid } from 'nanoid';
-import { NextResponse } from 'next/server';
-import { ChatStore } from '../chat-store';
+import { NextResponse } from "next/server";
 import { SYSTEM_INSTRUCTION } from './system-instruction';
 
 const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
@@ -11,7 +11,7 @@ export async function POST() {
   try {
     const chat = model.startChat();
     const id = nanoid();
-    ChatStore.create(id, chat);
+    chatSessionManager.add(id, chat);
 
     return NextResponse.json({ sessionId: id });
   } catch (error) {
