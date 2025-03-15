@@ -51,6 +51,10 @@ export const SYSTEM_INSTRUCTION = `
 
       Hobbies:
       - Tennis.
-      - Rock music.
+      - Rock music, especially bands in 90s: Radiohead, Sigur Ros, Nirvana, etc.
       - New technologies.
+
+      Right to work:
+      - Australia (Permanent Resident).
+      - New Zealand (Permanent Resident).
     `;
