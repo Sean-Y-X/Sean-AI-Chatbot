@@ -1,14 +1,17 @@
 import { Github } from "lucide-react";
+import { CV_FILE_NAME } from "@/constants";
+
+const TECH_STACK = [
+  { name: "Bun", url: "https://bun.sh" },
+  { name: "DeepChat", url: "https://deepchat.dev" },
+  { name: "Gemini", url: "https://deepmind.google/technologies/gemini/" },
+  { name: "Next.js", url: "https://nextjs.org" },
+  { name: "Shadcn/ui", url: "https://ui.shadcn.com" },
+  { name: "Vercel", url: "https://vercel.com" },
+];
+
 
 export default function About() {
-  const TECH_STACK = [
-    { name: "Bun", url: "https://bun.sh" },
-    { name: "DeepChat", url: "https://deepchat.dev" },
-    { name: "Gemini", url: "https://deepmind.google/technologies/gemini/" },
-    { name: "Next.js", url: "https://nextjs.org" },
-    { name: "Shadcn/ui", url: "https://ui.shadcn.com" },
-    { name: "Vercel", url: "https://vercel.com" },
-  ];
   return (
     <div className="max-w-3xl mx-auto py-12 px-6">
       <h1 className="text-4xl font-bold mb-8 text-center">
@@ -59,8 +62,8 @@ export default function About() {
         <p className="mb-4">
           Want a copy of my résumé?{" "}
           <a
-            href="/Senior_Fullstack_Engineer_Yiming_Xiao_Sean.pdf"
-            target="_blank"
+            href="/api/download-cv"
+            download={CV_FILE_NAME}
             rel="noopener noreferrer"
             className="text-blue-400 hover:text-blue-300 transition-colors"
           >
