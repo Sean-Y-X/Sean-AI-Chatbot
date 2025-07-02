@@ -8,11 +8,9 @@ export async function GET() {
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
     
-    // Redirect to the blob URL with target=_blank
     return NextResponse.redirect(blob.url, {
       headers: {
         'Content-Type': 'application/pdf',
-        'X-Frame-Options': 'SAMEORIGIN',
       }
     });
   } catch (error) {
