@@ -116,6 +116,7 @@ export default function Chat() {
         label: "Refresh",
         onClick: () => window.location.reload(),
       },
+      duration: Infinity,
     });
   };
 
