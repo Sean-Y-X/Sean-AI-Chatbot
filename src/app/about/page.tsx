@@ -1,5 +1,4 @@
 import { Github } from "lucide-react";
-import { CV_FILE_NAME } from "@/constants";
 
 const TECH_STACK = [
   { name: "Bun", url: "https://bun.sh" },
@@ -63,8 +62,7 @@ export default function About() {
           Want a copy of my résumé?{" "}
           <a
             href="/api/download-cv"
-            download={CV_FILE_NAME}
-            rel="noopener noreferrer"
+            target="_blank"
             className="text-blue-400 hover:text-blue-300 transition-colors"
           >
             <span>Click here</span>
