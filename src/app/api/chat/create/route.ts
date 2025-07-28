@@ -1,4 +1,4 @@
-import { chatSessionManager } from "@/lib/ChatSessionManager ";
+import { chatSessionManager } from "@/lib/ChatSessionManager";
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { nanoid } from 'nanoid';
 import { NextResponse } from "next/server";

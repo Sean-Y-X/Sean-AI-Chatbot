@@ -1,4 +1,4 @@
-import { chatSessionManager } from "@/lib/ChatSessionManager ";
+import { chatSessionManager } from "@/lib/ChatSessionManager";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
