@@ -1,8 +1,8 @@
-import type { ChatSession } from "@google/generative-ai";
+import type { Chat } from "@google/genai";
 
 class ChatSessionManager {
   private static instance: ChatSessionManager;
-  private chatSessions: Map<string, ChatSession>;
+  private chatSessions: Map<string, Chat>;
 
   private constructor() {
     this.chatSessions = new Map();
@@ -15,11 +15,11 @@ class ChatSessionManager {
     return ChatSessionManager.instance;
   }
 
-  public add(sessionId: string, session: ChatSession): void {
-    this.chatSessions.set(sessionId, session);
+  public add(sessionId: string, chatSession: Chat): void {
+    this.chatSessions.set(sessionId, chatSession);
   }
 
-  public get(sessionId: string): ChatSession | null {
+  public get(sessionId: string): Chat | null {
     return this.chatSessions.get(sessionId) || null;
   }
 
@@ -27,7 +27,7 @@ class ChatSessionManager {
     this.chatSessions.delete(sessionId);
   }
 
-  public getAll(): Map<string, ChatSession> {
+  public getAll(): Map<string, Chat> {
     return this.chatSessions;
   }
 }

@@ -21,12 +21,11 @@ export async function POST(request: Request) {
       return Response.error();
     }
 
-    const result = await chat.sendMessage(
-      messages.map(({ text }) => text).join("\n"),
+    const response = await chat.sendMessage(
+      {message: messages.map(({ text }) => text).join("\n")},
     );
-    const response = await result.response;
 
-    return NextResponse.json({ text: response.text() });
+    return NextResponse.json({ text: response.text });
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.error();
