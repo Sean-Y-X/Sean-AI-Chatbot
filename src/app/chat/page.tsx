@@ -41,6 +41,8 @@ export default function Chat() {
     createSession();
 
     return () => {
+      if (!sessionIdRef.current) return;
+
       // Delete the chat session when the component unmounts
       fetch(`/api/chat/${sessionIdRef.current}`, {
         method: "DELETE",
