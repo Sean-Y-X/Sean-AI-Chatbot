@@ -1,8 +1,8 @@
 "use client";
 
-import { Loader } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { CircleLoader } from "react-spinners";
 import { toast } from "sonner";
 
 // Dynamically import DeepChat with ssr disabled
@@ -140,7 +140,10 @@ export default function Chat() {
           </p>
         </div>
       ) : (
-        <Loader />
+        <CircleLoader
+          color="#fff"
+          size={60}
+         />
       )}
     </div>
   );
