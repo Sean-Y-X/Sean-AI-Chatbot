@@ -111,7 +111,7 @@ export default function Chat() {
 
   const onError = () => {
     toast("Something went wrong", {
-      description: "Please refresh the page and try again.",
+      description: "This is often due to a connection issue with Google Gemini. Please refresh the page and try again.",
       action: {
         label: "Refresh",
         onClick: () => window.location.reload(),
