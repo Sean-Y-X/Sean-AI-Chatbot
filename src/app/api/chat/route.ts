@@ -18,7 +18,10 @@ export async function POST(request: Request) {
     const chat = chatSessionManager.get(sessionId);
 
     if (!chat) {
-      return Response.error();
+      return NextResponse.json(
+        { error: "Chat Session not found" },
+        { status: 500 },
+      );
     }
 
     const response = await chat.sendMessage(
