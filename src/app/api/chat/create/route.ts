@@ -42,6 +42,7 @@ export async function POST() {
 
     return NextResponse.json({ sessionId: id });
   } catch (error) {
+    console.error('Error creating session:', error);
     const errorMessage = error instanceof Error ? error.message : 'Error creating session';
 
     return NextResponse.json(

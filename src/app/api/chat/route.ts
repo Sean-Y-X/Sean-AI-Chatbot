@@ -27,7 +27,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ text: response.text });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Error getting response';
+    console.error('Error getting chat response:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Error getting chat response';
 
     return NextResponse.json(
       { error: errorMessage },
