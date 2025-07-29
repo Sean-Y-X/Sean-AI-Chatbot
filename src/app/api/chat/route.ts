@@ -27,7 +27,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ text: response.text });
   } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.error();
+    const errorMessage = error instanceof Error ? error.message : 'Error getting response';
+
+    return NextResponse.json(
+      { error: errorMessage },
+      { status: 500 }
+    );
   }
 }

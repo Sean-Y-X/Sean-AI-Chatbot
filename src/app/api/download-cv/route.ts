@@ -14,7 +14,6 @@ export async function GET() {
       }
     });
   } catch (error) {
-    console.error('Error fetching PDF:', error);
-    return NextResponse.json({ error: 'PDF not found' }, { status: 404 });
+    return NextResponse.json({ error: 'PDF not found' }, { status: 500 });
   }
 }

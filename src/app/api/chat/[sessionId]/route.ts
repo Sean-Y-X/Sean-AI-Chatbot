@@ -23,7 +23,11 @@ export async function DELETE(
       { status: 200 },
     );
   } catch (error) {
-    console.error("Error deleting session:", error);
-    return NextResponse.error();
+    const errorMessage = error instanceof Error ? error.message : 'Error deleting session';
+
+    return NextResponse.json(
+      { error: errorMessage },
+      { status: 500 }
+    );
   }
 }
