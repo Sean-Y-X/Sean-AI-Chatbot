@@ -1,11 +1,11 @@
 import { CV_FILE_NAME } from "@/constants";
+import { db } from "@/db";
+import { conversations } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
 import { GoogleGenAI } from '@google/genai';
 import { head } from "@vercel/blob";
-import { nanoid } from 'nanoid';
 import { NextResponse } from "next/server";
-import { generateSystemInstruction } from './system-instruction'
-;
+import { generateSystemInstruction } from "./system-instruction";
 
 const genAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
@@ -19,28 +19,36 @@ export async function POST() {
         .then((response) => response.arrayBuffer());
 
     const chat = genAi.chats.create({
-      model: 'gemini-2.5-flash',
+      model: "gemini-3.5-flash",
       config: {
         systemInstruction: generateSystemInstruction(),
       },
       history: [
         {
-          parts: [{
-            inlineData: {
-              data: Buffer.from(pdfRes).toString("base64"),
-              mimeType: 'application/pdf',
-            }
-          }],
-          role: 'user',
-        }
-      ]
+          parts: [
+            {
+              inlineData: {
+                data: Buffer.from(pdfRes).toString("base64"),
+                mimeType: "application/pdf",
+              },
+            },
+          ],
+          role: "user",
+        },
+      ],
     });
 
-    const id = nanoid();
 
-    chatSessionManager.add(id, chat);
 
-    return NextResponse.json({ sessionId: id });
+    const [conversation] = await db
+      .insert(conversations)
+      .values({})
+      .returning();
+    const conversationId = conversation.id;
+    chatSessionManager.add(conversationId, chat);
+
+
+    return NextResponse.json({ sessionId: conversationId });
   } catch (error) {
     console.error('Error creating session:', error);
     const errorMessage = error instanceof Error ? error.message : 'Error creating session';

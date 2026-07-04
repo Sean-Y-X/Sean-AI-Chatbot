@@ -108,7 +108,7 @@ export default function Chat() {
         },
       },
     },
-    position: "inside-right" as const,
+    position: "inside-end" as const,
   };
 
   const onError = () => {
@@ -118,14 +118,14 @@ export default function Chat() {
         label: "Refresh",
         onClick: () => window.location.reload(),
       },
-      duration: Infinity,
+      duration: Number.POSITIVE_INFINITY,
     });
   };
 
   return (
     <div className="flex items-center justify-center h-[calc(100vh-80px)]">
       {sessionId ? (
-        <div className="flex flex-col gap-6 w-full mx-4 h-[500px] lg:h-[calc(100vh-108px)] lg:w-2/3">
+        <div className="flex flex-col gap-6 w-full mx-4 h-[500px] lg:h-8/9 lg:w-3/4">
           <DeepChat
             className="order-2 lg:order-1"
             connect={connect}
@@ -136,16 +136,9 @@ export default function Chat() {
             submitButtonStyles={submitButtonStyles}
             onError={onError}
           />
-          <p className="px-4 text-justify text-zinc-500 order-1 lg:order-2 mb-0 lg:mb-4">
-            * This app only communicates with Google Gemini and does not store
-            any messages. The real Sean Xiao won't have access to them.
-          </p>
         </div>
       ) : (
-        <CircleLoader
-          color="#fff"
-          size={60}
-         />
+        <CircleLoader color="#fff" size={60} />
       )}
     </div>
   );

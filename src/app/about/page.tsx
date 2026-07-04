@@ -63,6 +63,7 @@ export default function About() {
           <a
             href="/api/download-cv"
             target="_blank"
+            rel="noreferrer"
             className="text-blue-400 hover:text-blue-300 transition-colors"
           >
             <span>Click here</span>

@@ -1,5 +1,7 @@
 import { chatSessionManager } from "@/lib/ChatSessionManager";
 import { NextResponse } from "next/server";
+import { db } from "@/db";
+import { messages as messagesTable } from "@/db/schema";
 
 type Message = {
   text: string;
@@ -27,6 +29,14 @@ export async function POST(request: Request) {
     const response = await chat.sendMessage(
       {message: messages.map(({ text }) => text).join("\n")},
     );
+
+    await db
+      .insert(messagesTable)
+      .values({
+        conversationId: sessionId,
+        content: messages.pop()?.text || "",
+      })
+      .execute();
 
     return NextResponse.json({ text: response.text });
   } catch (error) {
