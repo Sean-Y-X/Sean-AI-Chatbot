@@ -123,9 +123,9 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex items-center justify-center h-[calc(100vh-80px)]">
+    <div className="flex flex-col overflow-hidden items-center justify-center h-[calc(100dvh-80px)]">
       {sessionId ? (
-        <div className="flex flex-col gap-6 w-full mx-4 h-[500px] lg:h-8/9 lg:w-3/4">
+        <div className="flex flex-col gap-6 w-full h-4/5 px-4 lg:h-8/9 lg:w-3/4">
           <DeepChat
             className="order-2 lg:order-1"
             connect={connect}

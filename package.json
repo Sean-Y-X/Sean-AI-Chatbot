@@ -40,6 +40,6 @@
     "drizzle-kit": "^1.0.0-rc.4-ca0f029",
     "postcss": "^8.5.16",
     "tailwindcss": "^4.3.2",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
