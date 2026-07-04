@@ -29,8 +29,10 @@ export async function POST() {
       ],
     });
 
-    const [conversation] = await db.insert(conversations).values({}).returning();
-    const conversationId = conversation.id;
+    const [{ conversationId }] = await db
+      .insert(conversations)
+      .values({})
+      .returning({ conversationId: conversations.id });
 
     chatSessionManager.setLastInteraction(conversationId, chat.id);
 
