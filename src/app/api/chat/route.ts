@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { messages as messagesTable } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
-import { genAi } from "@/lib/googleGenAi";
+import { genAi, MODEL_NAME } from "@/lib/googleGenAi";
 import { NextResponse } from "next/server";
 
 type Message = {
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     });
 
     const response = await genAi.interactions.create({
-      model: "gemini-2.5-flash",
+      model: MODEL_NAME,
       input: {
         type: "text",
         text: newMessage.text,

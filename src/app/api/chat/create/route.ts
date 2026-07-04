@@ -2,7 +2,7 @@ import { CV_FILE_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
-import { genAi } from "@/lib/googleGenAi";
+import { genAi, MODEL_NAME } from "@/lib/googleGenAi";
 import { head } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { generateSystemInstruction } from "./system-instruction";
@@ -14,7 +14,7 @@ export async function POST() {
     });
 
     const chat = await genAi.interactions.create({
-      model: "gemini-2.5-flash",
+      model: MODEL_NAME,
       system_instruction: generateSystemInstruction(),
       input: [
         {
