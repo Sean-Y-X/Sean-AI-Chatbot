@@ -1,7 +1,8 @@
+import { MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { messages as messagesTable } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
-import { genAi, MODEL_NAME } from "@/lib/googleGenAi";
+import { genAi } from "@/lib/googleGenAi";
 import { NextResponse } from "next/server";
 
 type Message = {

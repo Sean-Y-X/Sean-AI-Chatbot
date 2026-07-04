@@ -1,8 +1,8 @@
-import { CV_FILE_NAME } from "@/constants";
+import { CV_FILE_NAME, MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
-import { genAi, MODEL_NAME } from "@/lib/googleGenAi";
+import { genAi } from "@/lib/googleGenAi";
 import { head } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { generateSystemInstruction } from "./system-instruction";
