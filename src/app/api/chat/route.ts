@@ -1,7 +1,8 @@
-import { chatSessionManager } from "@/lib/ChatSessionManager";
-import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { messages as messagesTable } from "@/db/schema";
+import { chatSessionManager } from "@/lib/ChatSessionManager";
+import { genAi } from "@/lib/googleGenAi";
+import { NextResponse } from "next/server";
 
 type Message = {
   text: string;
@@ -16,10 +17,11 @@ type RequestBody = {
 export async function POST(request: Request) {
   try {
     const { sessionId, messages }: RequestBody = await request.json();
+    const newMessage = messages[messages.length - 1];
 
-    const chat = chatSessionManager.get(sessionId);
+    const lastInteractionId = chatSessionManager.getLastInteraction(sessionId);
 
-    if (!chat) {
+    if (!lastInteractionId) {
       return NextResponse.json(
         { error: "Chat Session not found" },
         { status: 500 },
@@ -29,22 +31,27 @@ export async function POST(request: Request) {
     await db.insert(messagesTable).values({
       conversationId: sessionId,
       role: "user",
-      content: messages[messages.length - 1]?.text || "",
+      content: newMessage.text || "",
     });
 
-    const response = await chat.sendMessage({
-      message: messages.map(({ text }) => text).join("\n"),
+    const response = await genAi.interactions.create({
+      model: "gemini-2.5-flash",
+      input: {
+        type: "text",
+        text: newMessage.text,
+      },
+      previous_interaction_id: lastInteractionId,
     });
 
     await db.insert(messagesTable).values([
       {
         conversationId: sessionId,
         role: "ai",
-        content: response.text || "",
+        content: response.output_text || "",
       },
     ]);
 
-    return NextResponse.json({ text: response.text });
+    return NextResponse.json({ text: response.output_text });
   } catch (error) {
     console.error("Error getting chat response:", error);
     const errorMessage =

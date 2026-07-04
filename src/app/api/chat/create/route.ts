@@ -2,12 +2,10 @@ import { CV_FILE_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
-import { GoogleGenAI } from '@google/genai';
+import { genAi } from "@/lib/googleGenAi";
 import { head } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { generateSystemInstruction } from "./system-instruction";
-
-const genAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 export async function POST() {
   try {
@@ -15,40 +13,28 @@ export async function POST() {
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
 
-    const pdfRes = await fetch(cvHeadBlob.url)
-        .then((response) => response.arrayBuffer());
-
-    const chat = genAi.chats.create({
-      model: "gemini-3.5-flash",
-      config: {
-        systemInstruction: generateSystemInstruction(),
-      },
-      history: [
+    const chat = await genAi.interactions.create({
+      model: "gemini-2.5-flash",
+      system_instruction: generateSystemInstruction(),
+      input: [
         {
-          parts: [
-            {
-              inlineData: {
-                data: Buffer.from(pdfRes).toString("base64"),
-                mimeType: "application/pdf",
-              },
-            },
-          ],
-          role: "user",
+          type: "text",
+          text: "This is the CV. Don't mention it in your response.",
+        },
+        {
+          type: "document",
+          uri: cvHeadBlob.url,
+          mime_type: "application/pdf",
         },
       ],
     });
 
-
-
-    const [conversation] = await db
-      .insert(conversations)
-      .values({})
-      .returning();
+    const [conversation] = await db.insert(conversations).values({}).returning();
     const conversationId = conversation.id;
-    chatSessionManager.add(conversationId, chat);
 
+    chatSessionManager.setLastInteraction(conversationId, chat.id);
 
-    return NextResponse.json({ sessionId: conversationId });
+    return NextResponse.json({ sessionId: conversationId, interactionId: chat.id });
   } catch (error) {
     console.error('Error creating session:', error);
     const errorMessage = error instanceof Error ? error.message : 'Error creating session';

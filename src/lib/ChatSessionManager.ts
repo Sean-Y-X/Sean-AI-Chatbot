@@ -1,8 +1,6 @@
-import type { Chat } from "@google/genai";
-
 class ChatSessionManager {
   private static instance: ChatSessionManager;
-  private chatSessions: Map<string, Chat>;
+  private chatSessions: Map<string, string>;
 
   private constructor() {
     this.chatSessions = new Map();
@@ -15,20 +13,19 @@ class ChatSessionManager {
     return ChatSessionManager.instance;
   }
 
-  public add(sessionId: string, chatSession: Chat): void {
-    this.chatSessions.set(sessionId, chatSession);
+  public setLastInteraction(
+    sessionId: string,
+    lastInteractionId: string,
+  ): void {
+    this.chatSessions.set(sessionId, lastInteractionId);
   }
 
-  public get(sessionId: string): Chat | null {
-    return this.chatSessions.get(sessionId) || null;
+  public getLastInteraction(sessionId: string): string {
+    return this.chatSessions.get(sessionId) || "";
   }
 
   public delete(sessionId: string): void {
     this.chatSessions.delete(sessionId);
-  }
-
-  public getAll(): Map<string, Chat> {
-    return this.chatSessions;
   }
 }
 
