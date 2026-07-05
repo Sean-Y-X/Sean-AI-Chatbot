@@ -44,6 +44,8 @@ export async function POST(request: Request) {
       previous_interaction_id: lastInteractionId,
     });
 
+    chatSessionManager.setLastInteraction(sessionId, response.id);
+
     await db.insert(messagesTable).values([
       {
         conversationId: sessionId,
