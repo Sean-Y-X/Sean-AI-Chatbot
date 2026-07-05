@@ -3,9 +3,9 @@ import { db } from "@/db";
 import { conversations } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
 import { genAi } from "@/lib/googleGenAi";
+import { generateSystemInstruction } from "@/lib/system-instruction";
 import { head } from "@vercel/blob";
 import { NextResponse } from "next/server";
-import { generateSystemInstruction } from "./system-instruction";
 
 export async function POST() {
   try {

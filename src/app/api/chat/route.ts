@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { messages as messagesTable } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
 import { genAi } from "@/lib/googleGenAi";
+import { generateSystemInstruction } from "@/lib/system-instruction";
 import { NextResponse } from "next/server";
 
 type Message = {
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
 
     const response = await genAi.interactions.create({
       model: MODEL_NAME,
+      system_instruction: generateSystemInstruction(),
       input: {
         type: "text",
         text: newMessage.text,
