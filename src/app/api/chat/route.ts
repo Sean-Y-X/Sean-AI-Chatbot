@@ -1,8 +1,8 @@
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { MODEL_NAME } from "@/constants";
 import { db } from "@/db";
-import { messages as messagesTable } from "@/db/schema";
-import { chatSessionManager } from "@/lib/ChatSessionManager";
+import { conversations, messages as messagesTable } from "@/db/schema";
 import { genAi } from "@/lib/googleGenAi";
 import { generateSystemInstruction } from "@/lib/system-instruction";
 
@@ -29,14 +29,19 @@ export async function POST(request: Request) {
 
     const newMessage = messages[messages.length - 1];
 
-    const lastInteractionId = chatSessionManager.getLastInteraction(sessionId);
+    const [conversation] = await db
+      .select({ lastInteractionId: conversations.lastInteractionId })
+      .from(conversations)
+      .where(eq(conversations.id, sessionId));
 
-    if (!lastInteractionId) {
+    if (!conversation?.lastInteractionId) {
       return NextResponse.json(
         { error: "Chat Session not found" },
         { status: 404 },
       );
     }
+
+    const lastInteractionId = conversation.lastInteractionId;
 
     await db.insert(messagesTable).values({
       conversationId: sessionId,
@@ -54,7 +59,10 @@ export async function POST(request: Request) {
       previous_interaction_id: lastInteractionId,
     });
 
-    chatSessionManager.setLastInteraction(sessionId, response.id);
+    await db
+      .update(conversations)
+      .set({ lastInteractionId: response.id })
+      .where(eq(conversations.id, sessionId));
 
     await db.insert(messagesTable).values([
       {

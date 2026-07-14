@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CircleLoader } from "react-spinners";
 import { toast } from "sonner";
 
@@ -13,11 +13,6 @@ const DeepChat = dynamic(
 
 export default function Chat() {
   const [sessionId, setSessionId] = useState<string>("");
-  const sessionIdRef = useRef<string>(sessionId);
-
-  useEffect(() => {
-    sessionIdRef.current = sessionId;
-  }, [sessionId]);
 
   useEffect(() => {
     // Create a new chat session when the component mounts
@@ -39,15 +34,6 @@ export default function Chat() {
     };
 
     createSession();
-
-    return () => {
-      if (!sessionIdRef.current) return;
-
-      // Delete the chat session when the component unmounts
-      fetch(`/api/chat/${sessionIdRef.current}`, {
-        method: "DELETE",
-      }).catch(console.error);
-    };
   }, []);
 
   const connect = useMemo(

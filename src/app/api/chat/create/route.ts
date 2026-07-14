@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import { CV_FILE_NAME, MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
-import { chatSessionManager } from "@/lib/ChatSessionManager";
 import { genAi } from "@/lib/googleGenAi";
 import { generateSystemInstruction } from "@/lib/system-instruction";
 
@@ -31,10 +30,8 @@ export async function POST() {
 
     const [{ conversationId }] = await db
       .insert(conversations)
-      .values({})
+      .values({ lastInteractionId: chat.id })
       .returning({ conversationId: conversations.id });
-
-    chatSessionManager.setLastInteraction(conversationId, chat.id);
 
     return NextResponse.json({
       sessionId: conversationId,
