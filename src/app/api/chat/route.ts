@@ -20,15 +20,10 @@ export async function POST(request: Request) {
   try {
     const { sessionId, messages }: RequestBody = await request.json();
 
-    if (
-      !sessionId ||
-      !Array.isArray(messages) ||
-      !messages.length
-    ) {
+    if (!sessionId || !Array.isArray(messages) || !messages.length) {
       return NextResponse.json(
         {
-          error:
-            "A sessionId and a non-empty messages array are required",
+          error: "A sessionId and a non-empty messages array are required",
         },
         { status: 400 },
       );
@@ -50,33 +45,33 @@ export async function POST(request: Request) {
 
     const lastInteractionId = conversation.lastInteractionId;
 
-    await db.insert(messagesTable).values({
-      conversationId: sessionId,
-      role: "user",
-      content: newMessage.text || "",
-    });
+    const [response] = await Promise.all([
+      genAi.interactions.create({
+        model: MODEL_NAME,
+        system_instruction: generateSystemInstruction(),
+        input: {
+          type: "text",
+          text: newMessage.text,
+        },
+        previous_interaction_id: lastInteractionId,
+      }),
+      db.insert(messagesTable).values({
+        conversationId: sessionId,
+        role: "user",
+        content: newMessage.text || "",
+      }),
+    ]);
 
-    const response = await genAi.interactions.create({
-      model: MODEL_NAME,
-      system_instruction: generateSystemInstruction(),
-      input: {
-        type: "text",
-        text: newMessage.text,
-      },
-      previous_interaction_id: lastInteractionId,
-    });
-
-    await db
-      .update(conversations)
-      .set({ lastInteractionId: response.id })
-      .where(eq(conversations.id, sessionId));
-
-    await db.insert(messagesTable).values([
-      {
+    await Promise.all([
+      db
+        .update(conversations)
+        .set({ lastInteractionId: response.id })
+        .where(eq(conversations.id, sessionId)),
+      db.insert(messagesTable).values({
         conversationId: sessionId,
         role: "ai",
         content: response.output_text || "",
-      },
+      }),
     ]);
 
     return NextResponse.json({ text: response.output_text });
