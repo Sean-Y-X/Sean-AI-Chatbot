@@ -2,15 +2,10 @@
   "version": "8",
   "dialect": "postgres",
   "id": "a53c42a2-10c6-4375-b2c1-8bd847bc094e",
-  "prevIds": [
-    "b32cf4fd-a414-4c3a-b8c1-9a98b23eb087"
-  ],
+  "prevIds": ["b32cf4fd-a414-4c3a-b8c1-9a98b23eb087"],
   "ddl": [
     {
-      "values": [
-        "user",
-        "ai"
-      ],
+      "values": ["user", "ai"],
       "name": "message_role",
       "entityType": "enums",
       "schema": "public"
@@ -120,14 +115,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "conversation_id"
-      ],
+      "columns": ["conversation_id"],
       "schemaTo": "public",
       "tableTo": "conversations",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "NO ACTION",
       "name": "messages_conversation_id_conversations_id_fkey",
@@ -136,9 +127,7 @@
       "table": "messages"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "conversations_pkey",
       "schema": "public",
@@ -146,9 +135,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "messages_pkey",
       "schema": "public",
