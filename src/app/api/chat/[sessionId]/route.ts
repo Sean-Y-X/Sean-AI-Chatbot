@@ -1,9 +1,9 @@
-import { chatSessionManager } from "@/lib/ChatSessionManager";
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { chatSessionManager } from "@/lib/ChatSessionManager";
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ sessionId: string }> },
 ) {
   try {
@@ -16,19 +16,17 @@ export async function DELETE(
       );
     }
 
-    chatSessionManager.delete(sessionId);
+    chatSessionManager.clearInteraction(sessionId);
 
     return NextResponse.json(
       { message: "Session deleted successfully" },
       { status: 200 },
     );
   } catch (error) {
-    console.error('Error deleting session:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Error deleting session';
+    console.error("Error deleting session:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Error deleting session";
 
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

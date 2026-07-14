@@ -1,6 +1,6 @@
 import { defineRelations } from "drizzle-orm";
-import { messages } from "./messages";
 import { conversations } from "./conversations";
+import { messages } from "./messages";
 
 export const relations = defineRelations({ conversations, messages }, (r) => ({
   messages: {

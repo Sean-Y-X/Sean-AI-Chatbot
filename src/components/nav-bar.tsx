@@ -1,3 +1,5 @@
+import { BotMessageSquare, Menu } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -10,9 +12,6 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { BotMessageSquare, Menu } from "lucide-react";
-import Link from "next/link";
-import React from "react";
 
 type Page = {
   title: string;
@@ -25,7 +24,8 @@ export default function NavBar({ pages }: { pages: Page[] }) {
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" className="lg:hidden">
-            <Menu />Menu
+            <Menu />
+            Menu
           </Button>
         </SheetTrigger>
         <SheetContent side="left">

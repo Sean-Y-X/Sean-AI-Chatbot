@@ -1,10 +1,10 @@
+import { NextResponse } from "next/server";
 import { MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { messages as messagesTable } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
 import { genAi } from "@/lib/googleGenAi";
 import { generateSystemInstruction } from "@/lib/system-instruction";
-import { NextResponse } from "next/server";
 
 type Message = {
   text: string;
@@ -19,6 +19,14 @@ type RequestBody = {
 export async function POST(request: Request) {
   try {
     const { sessionId, messages }: RequestBody = await request.json();
+
+    if (!sessionId || !Array.isArray(messages) || messages.length === 0) {
+      return NextResponse.json(
+        { error: "sessionId and a non-empty messages array are required" },
+        { status: 400 },
+      );
+    }
+
     const newMessage = messages[messages.length - 1];
 
     const lastInteractionId = chatSessionManager.getLastInteraction(sessionId);
@@ -26,7 +34,7 @@ export async function POST(request: Request) {
     if (!lastInteractionId) {
       return NextResponse.json(
         { error: "Chat Session not found" },
-        { status: 500 },
+        { status: 404 },
       );
     }
 

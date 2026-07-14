@@ -1,7 +1,7 @@
-import NavBar from "@/components/nav-bar";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import NavBar from "@/components/nav-bar";
 import "./globals.css";
 
 const geistSans = Geist({

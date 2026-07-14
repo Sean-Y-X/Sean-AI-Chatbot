@@ -1,11 +1,11 @@
+import { head } from "@vercel/blob";
+import { NextResponse } from "next/server";
 import { CV_FILE_NAME, MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
 import { chatSessionManager } from "@/lib/ChatSessionManager";
 import { genAi } from "@/lib/googleGenAi";
 import { generateSystemInstruction } from "@/lib/system-instruction";
-import { head } from "@vercel/blob";
-import { NextResponse } from "next/server";
 
 export async function POST() {
   try {
@@ -36,14 +36,15 @@ export async function POST() {
 
     chatSessionManager.setLastInteraction(conversationId, chat.id);
 
-    return NextResponse.json({ sessionId: conversationId, interactionId: chat.id });
+    return NextResponse.json({
+      sessionId: conversationId,
+      interactionId: chat.id,
+    });
   } catch (error) {
-    console.error('Error creating session:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Error creating session';
+    console.error("Error creating session:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Error creating session";
 
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

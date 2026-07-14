@@ -24,7 +24,7 @@ class ChatSessionManager {
     return this.chatSessions.get(sessionId) || "";
   }
 
-  public delete(sessionId: string): void {
+  public clearInteraction(sessionId: string): void {
     this.chatSessions.delete(sessionId);
   }
 }

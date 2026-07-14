@@ -9,7 +9,6 @@ const TECH_STACK = [
   { name: "Vercel", url: "https://vercel.com" },
 ];
 
-
 export default function About() {
   return (
     <div className="max-w-3xl mx-auto py-12 px-6">
@@ -59,14 +58,13 @@ export default function About() {
 
       <div className="space-y-8 mt-12">
         <p className="mb-4">
-          Want a copy of my résumé?{" "}
           <a
             href="/api/download-cv"
             target="_blank"
             rel="noreferrer"
             className="text-blue-400 hover:text-blue-300 transition-colors"
           >
-            <span>Click here</span>
+            <span>Download a copy of my résumé</span>
           </a>
         </p>
         <p className="mb-4">
