@@ -20,9 +20,16 @@ export async function POST(request: Request) {
   try {
     const { sessionId, messages }: RequestBody = await request.json();
 
-    if (!sessionId || !Array.isArray(messages) || messages.length === 0) {
+    if (
+      !sessionId ||
+      !Array.isArray(messages) ||
+      !messages.length
+    ) {
       return NextResponse.json(
-        { error: "sessionId and a non-empty messages array are required" },
+        {
+          error:
+            "A sessionId and a non-empty messages array are required",
+        },
         { status: 400 },
       );
     }
@@ -75,9 +82,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ text: response.output_text });
   } catch (error) {
     console.error("Error getting chat response:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Error getting chat response";
-
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error getting chat response" },
+      { status: 500 },
+    );
   }
 }

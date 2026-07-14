@@ -39,9 +39,9 @@ export async function POST() {
     });
   } catch (error) {
     console.error("Error creating session:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Error creating session";
-
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error creating session" },
+      { status: 500 },
+    );
   }
 }
