@@ -2,6 +2,27 @@ import { Download, Github, Linkedin, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
+const CONTACT_LINKS = [
+  {
+    label: "Download my résumé",
+    href: "/api/download-cv",
+    icon: Download,
+    newTab: true,
+  },
+  {
+    label: "Add me on LinkedIn",
+    href: "https://www.linkedin.com/in/sean-yx/",
+    icon: Linkedin,
+    newTab: true,
+  },
+  {
+    label: "Flick me an email",
+    href: "mailto:zy05530@gmail.com",
+    icon: Mail,
+    newTab: false,
+  },
+];
+
 const TECH_STACK = [
   { name: "Bun", url: "https://bun.sh" },
   { name: "DeepChat", url: "https://deepchat.dev" },
@@ -16,33 +37,21 @@ const TECH_STACK = [
 export default function About() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">
-      <h1 className="text-4xl font-bold  mb-8 text-center">
-        About Sean Xiao
-      </h1>
+      <h1 className="text-4xl font-bold  mb-8 text-center">About Sean Xiao</h1>
 
       <div className="flex flex-wrap gap-4 mt-12 justify-between">
-        <Button asChild variant="outline">
-          <a href="/api/download-cv" target="_blank" rel="noreferrer">
-            <Download />
-            <span>Download my résumé</span>
-          </a>
-        </Button>
-        <Button asChild variant="outline">
-          <a
-            href="https://www.linkedin.com/in/sean-yx/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Linkedin />
-            <span>Add me on LinkedIn</span>
-          </a>
-        </Button>
-        <Button asChild variant="outline">
-          <a href="mailto:zy05530@gmail.com">
-            <Mail />
-            <span>Flick me an email</span>
-          </a>
-        </Button>
+        {CONTACT_LINKS.map((link) => (
+          <Button key={link.label} asChild variant="outline">
+            <a
+              href={link.href}
+              target={link.newTab ? "_blank" : "_self"}
+              rel={link.newTab ? "noopener noreferrer" : undefined}
+            >
+              <link.icon />
+              <span>{link.label}</span>
+            </a>
+          </Button>
+        ))}
       </div>
       <h1 className="text-4xl font-bold mb-8 text-center mt-24">
         About This Website
@@ -57,11 +66,7 @@ export default function About() {
                 key={tech.name}
                 className="bg-zinc-800/50 rounded-md py-2 hover:bg-zinc-700/50 transition-colors text-gray-300 hover:text-blue-400 text-center"
               >
-                <a
-                  href={tech.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={tech.url} target="_blank" rel="noopener noreferrer">
                   {tech.name}
                 </a>
               </li>
@@ -83,8 +88,6 @@ export default function About() {
           </Button>
         </section>
       </div>
-
-
     </div>
   );
 }
