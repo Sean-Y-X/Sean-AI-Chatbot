@@ -37,8 +37,7 @@ const TECH_STACK = [
 export default function About() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">
-      <h1 className="text-4xl font-bold  mb-8 text-center">About Sean Xiao</h1>
-
+      <h1 className="text-4xl font-bold mb-8 text-center">About Sean Xiao</h1>
       <div className="flex flex-wrap gap-4 mt-12 justify-between">
         {CONTACT_LINKS.map((link) => (
           <Button key={link.label} asChild variant="outline">
