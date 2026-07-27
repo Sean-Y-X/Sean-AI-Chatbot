@@ -2,14 +2,11 @@ import { NextResponse } from "next/server";
 import { MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
-import { getCvUrl } from "@/lib/cv";
 import { genAi } from "@/lib/googleGenAi";
 import { generateSystemInstruction } from "@/lib/system-instruction";
 
 export async function POST() {
   try {
-    const cvUrl = await getCvUrl();
-
     const chat = await genAi.interactions.create({
       model: MODEL_NAME,
       system_instruction: generateSystemInstruction(),
@@ -20,7 +17,7 @@ export async function POST() {
         },
         {
           type: "document",
-          uri: cvUrl,
+          uri: process.env.CV_FILE_URL!,
           mime_type: "application/pdf",
         },
       ],
