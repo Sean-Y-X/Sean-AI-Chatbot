@@ -1,16 +1,14 @@
-import { head } from "@vercel/blob";
 import { NextResponse } from "next/server";
-import { CV_FILE_NAME, MODEL_NAME } from "@/constants";
+import { MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
+import { getCvUrl } from "@/lib/cv";
 import { genAi } from "@/lib/googleGenAi";
 import { generateSystemInstruction } from "@/lib/system-instruction";
 
 export async function POST() {
   try {
-    const cvHeadBlob = await head(CV_FILE_NAME, {
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    });
+    const cvUrl = await getCvUrl();
 
     const chat = await genAi.interactions.create({
       model: MODEL_NAME,
@@ -22,7 +20,7 @@ export async function POST() {
         },
         {
           type: "document",
-          uri: cvHeadBlob.url,
+          uri: cvUrl,
           mime_type: "application/pdf",
         },
       ],

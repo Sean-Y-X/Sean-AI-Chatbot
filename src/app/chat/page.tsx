@@ -1,8 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
-import { CircleLoader } from "react-spinners";
+import { useEffect, useMemo, useRef } from "react";
 import { toast } from "sonner";
 
 // Dynamically import DeepChat with ssr disabled
@@ -12,28 +11,25 @@ const DeepChat = dynamic(
 );
 
 export default function Chat() {
-  const [sessionId, setSessionId] = useState<string>("");
+  // Kick off session creation in the background and expose it as a promise so
+  // the chat UI can render immediately. The first message send awaits this.
+  const sessionIdPromise = useRef<Promise<string> | null>(null);
 
   useEffect(() => {
-    // Create a new chat session when the component mounts
-    const createSession = async () => {
-      try {
-        const response = await fetch("/api/chat/create", {
-          method: "POST",
-        });
+    sessionIdPromise.current = (async () => {
+      const response = await fetch("/api/chat/create", { method: "POST" });
 
-        if (!response.ok) {
-          throw new Error("Failed to create session");
-        }
-
-        const { sessionId } = await response.json();
-        setSessionId(sessionId);
-      } catch (error) {
-        console.error("Error creating session:", error);
+      if (!response.ok) {
+        throw new Error("Failed to create session");
       }
-    };
 
-    createSession();
+      const { sessionId } = await response.json();
+      return sessionId as string;
+    })();
+
+    sessionIdPromise.current.catch((error) => {
+      console.error("Error creating session:", error);
+    });
   }, []);
 
   const connect = useMemo(
@@ -42,12 +38,30 @@ export default function Chat() {
       headers: {
         "Content-Type": "application/json",
       },
-      additionalBodyProps: {
-        sessionId,
-      },
     }),
-    [sessionId],
+    [],
   );
+
+  // Inject the sessionId at send time, waiting for creation to finish if the
+  // user sends before it's ready. Surface an error if it never succeeded.
+  const requestInterceptor = async (requestDetails: {
+    body: unknown;
+    headers?: Record<string, string>;
+  }) => {
+    try {
+      const sessionId = await (sessionIdPromise.current ??
+        Promise.reject(new Error("Session not initialised")));
+      return {
+        ...requestDetails,
+        body: {
+          ...(requestDetails.body as Record<string, unknown>),
+          sessionId,
+        },
+      };
+    } catch {
+      return { error: "Something went wrong. Please refresh and try again." };
+    }
+  };
 
   const intro = {
     text: "G'day, mate! How may I help you today?",
@@ -110,22 +124,19 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col overflow-hidden items-center justify-center h-[calc(100dvh-80px)]">
-      {sessionId ? (
-        <div className="flex flex-col gap-6 w-full h-4/5 px-4 lg:h-8/9 lg:w-3/4">
-          <DeepChat
-            className="order-2 lg:order-1"
-            connect={connect}
-            introMessage={intro}
-            style={chatStyles}
-            messageStyles={messageStyles}
-            textInput={{ styles: textInputStyles }}
-            submitButtonStyles={submitButtonStyles}
-            onError={onError}
-          />
-        </div>
-      ) : (
-        <CircleLoader color="#fff" size={60} />
-      )}
+      <div className="flex flex-col gap-6 w-full h-4/5 px-4 lg:h-8/9 lg:w-3/4">
+        <DeepChat
+          className="order-2 lg:order-1"
+          connect={connect}
+          requestInterceptor={requestInterceptor}
+          introMessage={intro}
+          style={chatStyles}
+          messageStyles={messageStyles}
+          textInput={{ styles: textInputStyles }}
+          submitButtonStyles={submitButtonStyles}
+          onError={onError}
+        />
+      </div>
     </div>
   );
 }
