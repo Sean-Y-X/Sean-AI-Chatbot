@@ -6,7 +6,7 @@ const TECH_STACK = [
   { name: "Bun", url: "https://bun.sh" },
   { name: "DeepChat", url: "https://deepchat.dev" },
   { name: "Drizzle", url: "https://orm.drizzle.team" },
-  { name: "Gemini", url: "https://deepmind.google/technologies/gemini/" },
+  { name: "Gemini", url: "https://deepmind.google/models/gemini/" },
   { name: "Neon", url: "https://neon.tech" },
   { name: "Next.js", url: "https://nextjs.org" },
   { name: "Shadcn/ui", url: "https://ui.shadcn.com" },
