@@ -1,4 +1,6 @@
-import { Github } from "lucide-react";
+import { Download, Github, Linkedin, Mail } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 const TECH_STACK = [
   { name: "Bun", url: "https://bun.sh" },
@@ -11,8 +13,36 @@ const TECH_STACK = [
 
 export default function About() {
   return (
-    <div className="max-w-3xl mx-auto py-12 px-6">
-      <h1 className="text-4xl font-bold mb-8 text-center">
+    <div className="max-w-4xl mx-auto py-12 px-6">
+      <h1 className="text-4xl font-bold  mb-8 text-center">
+        About Sean Xiao
+      </h1>
+
+      <div className="flex flex-wrap gap-4 mt-12 justify-between">
+        <Button asChild variant="outline">
+          <a href="/api/download-cv" target="_blank" rel="noreferrer">
+            <Download />
+            <span>Download my résumé</span>
+          </a>
+        </Button>
+        <Button asChild variant="outline">
+          <a
+            href="https://www.linkedin.com/in/sean-yx/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Linkedin />
+            <span>Add me on LinkedIn</span>
+          </a>
+        </Button>
+        <Button asChild variant="outline">
+          <a href="mailto:zy05530@gmail.com">
+            <Mail />
+            <span>Flick me an email</span>
+          </a>
+        </Button>
+      </div>
+      <h1 className="text-4xl font-bold mb-8 text-center mt-24">
         About This Website
       </h1>
 
@@ -29,7 +59,7 @@ export default function About() {
                   href={tech.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 transition-colors"
+                  className="text-blue-400 hover:text-blue-300 transition-colors text-center block"
                 >
                   {tech.name}
                 </a>
@@ -40,45 +70,20 @@ export default function About() {
 
         <section>
           <h2 className="text-2xl font-semibold mb-4">Source Code</h2>
-          <a
-            href="https://github.com/Sean-Y-X/Sean-AI-Chatbot"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors"
-          >
-            <Github className="w-6 h-6" />
-            <span>View on GitHub</span>
-          </a>
+          <Button asChild variant="outline">
+            <a
+              href="https://github.com/Sean-Y-X/Sean-AI-Chatbot"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github />
+              <span>View on GitHub</span>
+            </a>
+          </Button>
         </section>
       </div>
 
-      <h1 className="text-4xl font-bold mt-16 mb-8 text-center">
-        About The Developer
-      </h1>
-
-      <div className="space-y-8 mt-12">
-        <p className="mb-4">
-          <a
-            href="/api/download-cv"
-            target="_blank"
-            rel="noreferrer"
-            className="text-blue-400 hover:text-blue-300 transition-colors"
-          >
-            <span>Download a copy of my résumé</span>
-          </a>
-        </p>
-        <p className="mb-4">
-          Flick me an email:{" "}
-          <a
-            href="mailto:zy05530@gmail.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 hover:text-blue-300 transition-colors"
-          >
-            <span>zy05530@gmail.com</span>
-          </a>
-        </p>
-      </div>
+      
     </div>
   );
 }
