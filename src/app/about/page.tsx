@@ -55,13 +55,12 @@ export default function About() {
             {TECH_STACK.map((tech) => (
               <li
                 key={tech.name}
-                className="bg-zinc-800/50 rounded-lg p-4 hover:bg-zinc-700/50 transition-colors"
+                className="bg-zinc-800/50 rounded-md py-2 hover:bg-zinc-700/50 transition-colors text-gray-300 hover:text-blue-400 text-center"
               >
                 <a
                   href={tech.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-300 hover:text-blue-400 transition-colors text-center block"
                 >
                   {tech.name}
                 </a>
