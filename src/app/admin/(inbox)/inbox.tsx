@@ -116,7 +116,11 @@ export default function Inbox({
                   type="button"
                   onClick={() => select(item.id)}
                   className={cn(
-                    "w-full cursor-pointer border-b border-border px-4 py-3 text-left transition-colors hover:bg-accent",
+                    // `relative` anchors the sr-only span below: it is
+                    // position:absolute, and without a positioned ancestor it
+                    // resolves against the document, escaping the list's
+                    // overflow clip and stretching the page.
+                    "relative w-full cursor-pointer border-b border-border px-4 py-3 text-left transition-colors hover:bg-accent",
                     item.id === selectedId && "bg-accent",
                   )}
                 >

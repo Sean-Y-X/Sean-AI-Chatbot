@@ -1,4 +1,4 @@
-import { desc, eq, isNotNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { conversations, messages } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin-auth";
@@ -8,6 +8,21 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   await requireAdmin();
+
+  // Built with the query builder rather than a hand-written `sql` template:
+  // inside a select field, a template renders columns unqualified, so the
+  // outer `conversations.id` would silently bind to the subquery's own table.
+  const firstUserMessage = db
+    .select({ content: messages.content })
+    .from(messages)
+    .where(
+      and(
+        eq(messages.conversationId, conversations.id),
+        eq(messages.role, "user"),
+      ),
+    )
+    .orderBy(asc(messages.createdAt))
+    .limit(1);
 
   const rows = await db
     .select({
@@ -20,14 +35,7 @@ export default async function AdminPage() {
         eq(messages.conversationId, conversations.id),
       ),
       // First thing the visitor actually typed, used as the list preview.
-      preview: sql<string | null>`(
-        select ${messages.content}
-        from ${messages}
-        where ${messages.conversationId} = ${conversations.id}
-          and ${messages.role} = 'user'
-        order by ${messages.createdAt}
-        limit 1
-      )`,
+      preview: sql<string | null>`(${firstUserMessage})`,
     })
     .from(conversations)
     // Conversations are created on page load, before the visitor says
