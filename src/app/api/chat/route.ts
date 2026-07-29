@@ -60,12 +60,18 @@ export async function POST(request: Request) {
         role: "user",
         content: newMessage.text || "",
       }),
+      // Stamped here as well as below so a conversation still surfaces in the
+      // admin inbox if the model call fails after the user message landed.
+      db
+        .update(conversations)
+        .set({ lastMessageAt: new Date() })
+        .where(eq(conversations.id, sessionId)),
     ]);
 
     await Promise.all([
       db
         .update(conversations)
-        .set({ lastInteractionId: response.id })
+        .set({ lastInteractionId: response.id, lastMessageAt: new Date() })
         .where(eq(conversations.id, sessionId)),
       db.insert(messagesTable).values({
         conversationId: sessionId,
