@@ -15,7 +15,7 @@ export async function login(
   formData: FormData,
 ): Promise<LoginState> {
   if (!isPasscodeConfigured()) {
-    return { error: "ADMIN_PASSCODE is not set on the server." };
+    return { error: "Admin passcode is not set on the server." };
   }
 
   const passcode = formData.get("passcode");

@@ -17,7 +17,7 @@ export default function LoginForm() {
       <div className="flex flex-col gap-1">
         <h1 className="text-lg font-medium">Admin</h1>
         <p className="text-sm text-muted-foreground">
-          Enter the passcode to view chat history.
+          Enter the passcode
         </p>
       </div>
 
