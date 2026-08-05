@@ -61,11 +61,13 @@ export default function About() {
           <h2 className="text-2xl font-semibold mb-4">Tech Stack</h2>
           <ul className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {TECH_STACK.map((tech) => (
-              <li
-                key={tech.name}
-                className="bg-zinc-800/50 rounded-md py-2 hover:bg-zinc-700/50 cursor-pointer transition-colors text-gray-300 hover:text-blue-400 text-center"
-              >
-                <a href={tech.url} target="_blank" rel="noopener noreferrer">
+              <li key={tech.name}>
+                <a
+                  href={tech.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-md bg-zinc-800/50 py-2 text-center text-gray-300 transition-colors hover:bg-zinc-700/50 hover:text-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+                >
                   {tech.name}
                 </a>
               </li>
