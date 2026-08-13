@@ -13,7 +13,7 @@ export default function Home() {
         <p className="max-w-[600px] text-center sm:text-left">
           Curious about my work experience and skills?
         </p>
-        <Link href="/chat">
+        <Link href="/temp-offline">
           <Button aria-label="Start Chat">Let's chat!</Button>
         </Link>
       </main>

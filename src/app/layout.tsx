@@ -33,7 +33,7 @@ const PAGES = [
   },
   {
     title: "Chat",
-    link: "/chat",
+    link: "/temp-offline",
   },
   {
     title: "About",
