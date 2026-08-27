@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
+import { getCvDocument } from "@/lib/cv-document";
 import { genAi } from "@/lib/googleGenAi";
 import { generateSystemInstruction } from "@/lib/system-instruction";
 
@@ -15,11 +16,7 @@ export async function POST() {
           type: "text",
           text: "This is the CV. Don't mention it in your response.",
         },
-        {
-          type: "document",
-          uri: process.env.CV_FILE_URL!,
-          mime_type: "application/pdf",
-        },
+        await getCvDocument(),
       ],
     });
 
