@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations, messages as messagesTable } from "@/db/schema";
-import { genAi } from "@/lib/googleGenAi";
+import { genAi } from "@/lib/google-gen-ai";
 import { generateSystemInstruction } from "@/lib/system-instruction";
 
 type Message = {

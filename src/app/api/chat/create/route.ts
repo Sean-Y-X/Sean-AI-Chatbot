@@ -3,7 +3,7 @@ import { MODEL_NAME } from "@/constants";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
 import { getCvDocument } from "@/lib/cv-document";
-import { genAi } from "@/lib/googleGenAi";
+import { genAi } from "@/lib/google-gen-ai";
 import { generateSystemInstruction } from "@/lib/system-instruction";
 
 export async function POST() {
