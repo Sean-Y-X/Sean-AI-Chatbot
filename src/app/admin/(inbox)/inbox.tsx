@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { logout } from "../login/actions";
@@ -34,6 +34,16 @@ const fullTime = new Intl.DateTimeFormat(undefined, {
   timeStyle: "short",
 });
 
+// `Intl` resolves to the server's timezone (UTC in production) during the
+// server render, and hydration keeps server-rendered text, so anything
+// formatted in the first render would stay stuck in UTC. Waiting for mount
+// makes every timestamp use the admin's own timezone.
+function useMounted() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted;
+}
+
 export default function Inbox({
   conversations,
 }: {
@@ -44,6 +54,7 @@ export default function Inbox({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const mounted = useMounted();
 
   const unreadCount = conversations.filter((item) => item.unread).length;
   const selected = conversations.find((item) => item.id === selectedId) ?? null;
@@ -147,9 +158,10 @@ export default function Inbox({
                     <time
                       className="shrink-0 text-xs text-muted-foreground"
                       dateTime={item.lastMessageAt}
-                      suppressHydrationWarning
                     >
-                      {listTime.format(new Date(item.lastMessageAt))}
+                      {mounted
+                        ? listTime.format(new Date(item.lastMessageAt))
+                        : ""}
                     </time>
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">
