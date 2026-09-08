@@ -12,12 +12,14 @@ export const conversations = pgTable(
     // Timestamp of the newest message in this conversation. Denormalised from
     // `messages` so the admin inbox can sort and filter without an aggregate
     // join. Null means the conversation was created but never used.
-    lastMessageAt: timestamp("last_message_at"),
+    lastMessageAt: timestamp("last_message_at", { withTimezone: true }),
     // How far the admin has read. A conversation is unread when it has messages
     // newer than this, so replying after a read makes it unread again. Null
     // means never read.
-    readAt: timestamp("read_at"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    readAt: timestamp("read_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
   (table) => [
     // The admin inbox lists conversations newest-first.
