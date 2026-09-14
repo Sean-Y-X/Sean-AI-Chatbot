@@ -39,3 +39,14 @@ export async function markAllAsRead() {
 
   revalidatePath("/admin");
 }
+
+export async function setStarred(conversationId: string, starred: boolean) {
+  await requireAdmin();
+
+  await db
+    .update(conversations)
+    .set({ starred })
+    .where(eq(conversations.id, conversationId));
+
+  revalidatePath("/admin");
+}

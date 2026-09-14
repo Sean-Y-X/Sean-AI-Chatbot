@@ -30,6 +30,7 @@ export default async function AdminPage() {
       createdAt: conversations.createdAt,
       lastMessageAt: conversations.lastMessageAt,
       readAt: conversations.readAt,
+      starred: conversations.starred,
       messageCount: db.$count(
         messages,
         eq(messages.conversationId, conversations.id),
@@ -49,6 +50,7 @@ export default async function AdminPage() {
     lastMessageAt: (row.lastMessageAt ?? row.createdAt).toISOString(),
     messageCount: Number(row.messageCount),
     preview: row.preview,
+    starred: row.starred,
     unread:
       row.readAt === null ||
       (row.lastMessageAt !== null && row.lastMessageAt > row.readAt),

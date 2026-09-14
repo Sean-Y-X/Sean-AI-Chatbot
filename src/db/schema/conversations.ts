@@ -1,5 +1,12 @@
 import { desc } from "drizzle-orm";
-import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const conversations = pgTable(
   "conversations",
@@ -17,6 +24,8 @@ export const conversations = pgTable(
     // newer than this, so replying after a read makes it unread again. Null
     // means never read.
     readAt: timestamp("read_at", { withTimezone: true }),
+    // Admin-only flag for pinning a conversation worth coming back to
+    starred: boolean("starred").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

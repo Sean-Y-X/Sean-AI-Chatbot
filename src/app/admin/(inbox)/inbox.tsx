@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { Star } from "lucide-react";
+import { useEffect, useOptimistic, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { logout } from "../login/actions";
-import { markAllAsRead, markAsRead } from "./actions";
+import { markAllAsRead, markAsRead, setStarred } from "./actions";
 
 export type ConversationSummary = {
   id: string;
@@ -13,6 +14,7 @@ export type ConversationSummary = {
   messageCount: number;
   preview: string | null;
   unread: boolean;
+  starred: boolean;
 };
 
 type Message = {
@@ -44,6 +46,36 @@ function useMounted() {
   return mounted;
 }
 
+function StarButton({
+  starred,
+  onToggle,
+  className,
+}: {
+  starred: boolean;
+  onToggle: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={starred}
+      onClick={onToggle}
+      className={cn(
+        "cursor-pointer rounded-md p-1.5 transition-colors hover:bg-accent",
+        starred ? "text-[#7F00FF]" : "text-muted-foreground",
+        className,
+      )}
+    >
+      <span className="sr-only">{starred ? "Unstar" : "Star"}</span>
+      <Star
+        className="size-4"
+        fill={starred ? "currentColor" : "none"}
+        aria-hidden="true"
+      />
+    </button>
+  );
+}
+
 export default function Inbox({
   conversations,
 }: {
@@ -54,10 +86,33 @@ export default function Inbox({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const [starredOnly, setStarredOnly] = useState(false);
   const mounted = useMounted();
 
-  const unreadCount = conversations.filter((item) => item.unread).length;
-  const selected = conversations.find((item) => item.id === selectedId) ?? null;
+  // The star flips as soon as it is clicked; the server action only revalidates
+  // the page afterwards, which would otherwise leave the icon stale for the
+  // length of a round trip.
+  const [items, applyStar] = useOptimistic(
+    conversations,
+    (state, change: { id: string; starred: boolean }) =>
+      state.map((item) =>
+        item.id === change.id ? { ...item, starred: change.starred } : item,
+      ),
+  );
+
+  const unreadCount = items.filter((item) => item.unread).length;
+  const starredCount = items.filter((item) => item.starred).length;
+  // The detail pane keeps rendering a conversation the filter has hidden, so
+  // the selection is looked up in the full list rather than the visible one.
+  const selected = items.find((item) => item.id === selectedId) ?? null;
+  const visible = starredOnly ? items.filter((item) => item.starred) : items;
+
+  const toggleStar = (item: ConversationSummary) => {
+    startTransition(async () => {
+      applyStar({ id: item.id, starred: !item.starred });
+      await setStarred(item.id, !item.starred);
+    });
+  };
 
   // Always refetched rather than cached, so a conversation that grew since the
   // page was rendered never shows a stale transcript.
@@ -94,7 +149,7 @@ export default function Inbox({
           selected ? "hidden" : "flex",
         )}
       >
-        <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-medium">Inbox</h1>
             {unreadCount > 0 && (
@@ -104,6 +159,28 @@ export default function Inbox({
             )}
           </div>
           <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-pressed={starredOnly}
+              title={starredOnly ? "Show all" : "Show starred only"}
+              className={cn("px-2", starredOnly && "bg-accent")}
+              onClick={() => setStarredOnly((value) => !value)}
+            >
+              <span className="sr-only">
+                {starredOnly ? "Show all conversations" : "Show starred only"}
+              </span>
+              <Star
+                className={cn(starredOnly && "text-[#7F00FF]")}
+                fill={starredOnly ? "currentColor" : "none"}
+                aria-hidden="true"
+              />
+              {starredCount > 0 && (
+                <span className="text-xs text-muted-foreground">
+                  {starredCount}
+                </span>
+              )}
+            </Button>
             <Button
               variant="ghost"
               size="sm"
@@ -120,14 +197,16 @@ export default function Inbox({
           </div>
         </div>
 
-        {conversations.length === 0 ? (
+        {visible.length === 0 ? (
           <p className="p-4 text-sm text-muted-foreground">
-            No conversations yet.
+            {starredOnly
+              ? "No starred conversations."
+              : "No conversations yet."}
           </p>
         ) : (
           <ul className="flex-1 overflow-y-auto">
-            {conversations.map((item) => (
-              <li key={item.id}>
+            {visible.map((item) => (
+              <li key={item.id} className="relative border-b border-border">
                 <button
                   type="button"
                   onClick={() => select(item.id)}
@@ -136,7 +215,10 @@ export default function Inbox({
                     // position:absolute, and without a positioned ancestor it
                     // resolves against the document, escaping the list's
                     // overflow clip and stretching the page.
-                    "relative w-full cursor-pointer border-b border-border px-4 py-3 text-left transition-colors hover:bg-accent",
+                    // The right padding keeps the row text clear of the star
+                    // button, which overlays the row rather than sitting inside
+                    // it — a button cannot nest in a button.
+                    "relative w-full cursor-pointer px-4 py-3 pr-12 text-left transition-colors hover:bg-accent",
                     item.id === selectedId && "bg-accent",
                   )}
                 >
@@ -174,6 +256,11 @@ export default function Inbox({
                     {item.messageCount === 1 ? "message" : "messages"}
                   </p>
                 </button>
+                <StarButton
+                  starred={item.starred}
+                  onToggle={() => toggleStar(item)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                />
               </li>
             ))}
           </ul>
@@ -209,6 +296,11 @@ export default function Inbox({
               >
                 Started {fullTime.format(new Date(selected.createdAt))}
               </span>
+              <StarButton
+                starred={selected.starred}
+                onToggle={() => toggleStar(selected)}
+                className="ml-auto shrink-0"
+              />
             </div>
 
             <div className="flex-1 space-y-3 overflow-y-auto p-4">
