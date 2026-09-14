@@ -74,6 +74,11 @@ export default function Inbox({
       }
       const data = await response.json();
       setMessages(data.messages);
+
+      const item = conversations.find((conversation) => conversation.id === id);
+      if (item?.unread) {
+        startTransition(() => markAsRead(id));
+      }
     } catch {
       setError("Couldn't load this conversation.");
     } finally {
@@ -189,31 +194,21 @@ export default function Inbox({
           </div>
         ) : (
           <>
-            <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
-              <div className="flex min-w-0 items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="md:hidden"
-                  onClick={() => setSelectedId(null)}
-                >
-                  ← Back
-                </Button>
-                <span
-                  className="truncate text-sm text-muted-foreground"
-                  suppressHydrationWarning
-                >
-                  Started {fullTime.format(new Date(selected.createdAt))}
-                </span>
-              </div>
+            <div className="flex min-w-0 items-center gap-2 border-b border-border px-4 py-3">
               <Button
                 variant="ghost"
                 size="sm"
-                disabled={pending || !selected.unread}
-                onClick={() => startTransition(() => markAsRead(selected.id))}
+                className="md:hidden"
+                onClick={() => setSelectedId(null)}
               >
-                {selected.unread ? "Mark as read" : "Read"}
+                ← Back
               </Button>
+              <span
+                className="truncate text-sm text-muted-foreground"
+                suppressHydrationWarning
+              >
+                Started {fullTime.format(new Date(selected.createdAt))}
+              </span>
             </div>
 
             <div className="flex-1 space-y-3 overflow-y-auto p-4">
